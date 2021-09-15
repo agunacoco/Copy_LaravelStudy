@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -36,7 +37,23 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title'=> 'required',
+            'content'=> 'required|min:3'
+        ]);
+        $filename = null;
+        if($request->hasFile('image')){
+            $filename = time().'_'.$request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('public/images', $filename);
+        }
+        $input = array_merge($request->all(), ['user_id'=> Auth::user()->id]);
+        if($filename){
+            $input = array_merge($input, ['image'=> $filename]);
+            
+        }
+        Post::create($input);
+        
+        return redirect()->route('posts.index');
     }
 
     /**
