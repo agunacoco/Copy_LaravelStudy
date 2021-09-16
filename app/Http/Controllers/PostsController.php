@@ -15,7 +15,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest('updated_at')->paginate(10);
+        $posts = Post::latest('updated_at')->paginate(6);
         return view('posts.index', ['posts' => $posts]);
     }
 
@@ -64,7 +64,8 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::find($id);
+        return view('posts.show', ['post'=>$post]);
     }
 
     /**
