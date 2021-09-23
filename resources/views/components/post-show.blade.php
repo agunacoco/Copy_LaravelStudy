@@ -3,7 +3,7 @@
         <div class="row">
           <div class="col">
             @if ($post->image)
-            <img src="{{ '/storage/images/'.$post->image }}" class="card-img-top p-2 mt-3 ml-auto mr-auto" alt="my post image" style="width:100%">  
+            <img src="{{ '/storage/images/'.$post->image }}" class="card-img-top p-3 mt-4 ml-auto mr-auto" alt="my post image" style="width:100%">  
             @else
             <img src="{{ '/storage/images/'.'no_image.png' }}" class="img-fluid rounded-start" alt="no image" style="width:100%">
             @endif
@@ -19,10 +19,22 @@
             </div>
           </div>
         </div>
-        <div class="card-body">
-            <a href="" class="card-link">Update</a>
-            <a href="" class="card-link">Delete</a>
+        <div class="card-body flex">
+            <a href="{{ route('posts.edit', ['post'=>$post->id]) }}" class="card-link">Update</a>
+            <form class="ml-4" action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post" id="form">
+              @csrf
+              @method('delete')
+              <button onclick="onDelete(event)" type="submit" >Delete</button>
+            </form>
         </div>
     </div>
+    <script>
+      function onDelete(e) {
+        sudo = confirm('삭제하시겠습니까?');
+        if(!sudo){
+          e.preventDefault();
+        }
+      }
+    </script>
 
 </div>

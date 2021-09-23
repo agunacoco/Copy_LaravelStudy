@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -49,7 +50,6 @@ class PostsController extends Controller
         $input = array_merge($request->all(), ['user_id'=> Auth::user()->id]);
         if($filename){
             $input = array_merge($input, ['image'=> $filename]);
-            
         }
         Post::create($input);
         
@@ -76,7 +76,8 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::find($id);
+        return view('posts.edit', ['post'=>$post]);
     }
 
     /**
@@ -88,7 +89,23 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->content = $request->content;
+
+        $filename = null;
+        if($request->hasFile('image')){
+            if($post->image){
+                Storage::delete('public/images/'.$post->image);
+            }
+            $filename = time().'_'.$request->file('image')->getClientOriginalName();
+            $path = $request->file('image')->storeAs('public/images', $filename);
+        }
+        $post->image = $filename;
+
+        $post->save();
+
+        return redirect()->route('posts.show', ['post'=>$post->id]);
     }
 
     /**
@@ -99,6 +116,13 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        if($post->image){
+            // Storage 파사드의 경로는 기본적으로 storage/app 디렉토리로 설정된다.
+            // 그래서 public/...으로 경로를 적어줘야한다.
+            Storage::delete('public/images/'.$post->image);
+        }
+        $post->delete();
+        return redirect()->route('posts.index');
     }
 }
