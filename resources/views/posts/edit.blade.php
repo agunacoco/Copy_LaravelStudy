@@ -8,7 +8,7 @@
         </div>
     </x-slot>
     <div class="p-5">
-        <form action="{{route('posts.update', ['post'=>$post->id])}}" method="post" enctype="multipart/form-data" >
+        <form id="editForm" action="{{route('posts.update', ['post'=>$post->id])}}" method="post" enctype="multipart/form-data" >
             @csrf
             @method('put')
             <div class="form-group">
@@ -30,14 +30,24 @@
                     <label for="image" class="form-label">Image</label>
                     @if ($post->image)
                         <img src="{{ '/storage/images/'.$post->image }}" alt="post_image" style="width:50%" />
+                        <button class="btn btn-outline-secondary btn-sm mt-3" onclick="return deleteImage()">Image Delete</button>
                     @else
                         <img src="{{ '/storage/images/'.'no_image.png' }}" alt="no_image" style="width:50%" />
                     @endif
-                    <input class="form-control" type="file" id="image" name="image">
+                    <input class="form-control mt-3" type="file" id="image" name="image">
                 </div>
                 <button type="submit" class="btn btn-primary hover:bg-blue-700">Submit</button>
             </div>
         </form>
+        <script>
+            function deleteImage() {
+                editForm = document.getElementById('editForm');
+                editForm._method.value="delete";
+                editForm.action="/posts/{{ $post->id }}/image";
+                editForm.submit();
+                return false;
+            }
+        </script>
     </div>
     
 </x-app-layout>

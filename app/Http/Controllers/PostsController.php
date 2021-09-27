@@ -93,18 +93,16 @@ class PostsController extends Controller
         $post->title = $request->title;
         $post->content = $request->content;
 
-        $filename = null;
         if($request->hasFile('image')){
             if($post->image){
                 Storage::delete('public/images/'.$post->image);
             }
             $filename = time().'_'.$request->file('image')->getClientOriginalName();
             $path = $request->file('image')->storeAs('public/images', $filename);
+            $post->image = $filename;
         }
-        $post->image = $filename;
-
+    
         $post->save();
-
         return redirect()->route('posts.show', ['post'=>$post->id]);
     }
 
@@ -124,5 +122,14 @@ class PostsController extends Controller
         }
         $post->delete();
         return redirect()->route('posts.index');
+    }
+
+    public function deleteImage($id){
+        $post = Post::find($id);
+        Storage::delete('public/images/'.$post->image);
+        $post->image = null;
+        $post->save();
+
+        return redirect()->route('posts.edit', ['post'=>$post->id]);
     }
 }

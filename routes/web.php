@@ -17,7 +17,7 @@ use App\Http\Controllers\PostsController;
 Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
-
+Route::delete('/posts/{post}/image', [PostsController::class, 'deleteImage'])->middleware(['auth']);
 Route::resource('/posts', PostsController::class)->middleware(['auth']);
 
 require __DIR__.'/auth.php';
