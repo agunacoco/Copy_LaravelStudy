@@ -12,7 +12,11 @@
           <div class="col-md-8">
             <div class="card-body mt-3">
               <h5 class="card-title text-2xl md:font-black">{{ $post->title }}</h5>
-              <h6 class="card-subtitle mb-2 text-lg text-muted">{{ $post->writer->name}}</h6><hr>
+              <div class="flex">
+                <h6 class="card-subtitle mb-2 text-lg text-muted">{{ $post->writer->name}}</h6>
+                <like-button />
+              </div>
+              <hr>
               <p class="card-text text-lg md:font-bold mt-3 mb-4">{{ $post->content }}</p>
               <p class="card-text mb-2 text-lg text-muted">Created {{ $post->created_at }}</p>
               <p class="card-text mb-2 text-lg text-muted">Last updated {{ $post->updated_at->diffForHumans() }}</p>
