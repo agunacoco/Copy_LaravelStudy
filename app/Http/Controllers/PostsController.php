@@ -64,7 +64,7 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::with('likes')->find($id);
         return view('posts.show', ['post'=>$post]);
     }
 
@@ -132,4 +132,5 @@ class PostsController extends Controller
 
         return redirect()->route('posts.edit', ['post'=>$post->id]);
     }
+
 }

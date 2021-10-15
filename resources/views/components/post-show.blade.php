@@ -14,7 +14,7 @@
               <h5 class="card-title text-2xl md:font-black">{{ $post->title }}</h5>
               <div class="flex">
                 <h6 class="card-subtitle mb-2 text-lg text-muted">{{ $post->writer->name}}</h6>
-                <like-button />
+                <like-button class="ml-3" :post="{{ $post }}"/>
               </div>
               <hr>
               <p class="card-text text-lg md:font-bold mt-3 mb-4">{{ $post->content }}</p>
