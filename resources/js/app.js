@@ -8,6 +8,11 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
+import Alpine from "alpinejs";
+window.Alpine = Alpine;
+Alpine.start();
+
+window.Swal = require('sweetalert2');
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -21,6 +26,7 @@ window.Vue = require('vue').default;
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('like-button', require('./components/LikeButton.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

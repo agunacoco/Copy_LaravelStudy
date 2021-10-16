@@ -12,7 +12,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
@@ -32,5 +32,21 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+
+            @if (session('success'))
+                showSweetMsg();
+            @endif
+
+            function showSweetMsg(){
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Your work has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        </script>
     </body>
 </html>

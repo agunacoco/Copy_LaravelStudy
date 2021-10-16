@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest('updated_at')->paginate(6);
+        $posts = Post::with("likes")->latest('updated_at')->paginate(6);
         return view('posts.index', ['posts' => $posts]);
     }
 
@@ -53,7 +54,7 @@ class PostsController extends Controller
         }
         Post::create($input);
         
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with(session('session', 1));
     }
 
     /**
@@ -74,9 +75,13 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $post = Post::find($id);
+
+        if($request->user()->cant('update', $post)){
+            abort(403);
+        }
         return view('posts.edit', ['post'=>$post]);
     }
 
@@ -92,6 +97,7 @@ class PostsController extends Controller
         $post = Post::find($id);
         $post->title = $request->title;
         $post->content = $request->content;
+        
 
         if($request->hasFile('image')){
             if($post->image){
@@ -112,9 +118,12 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $post = Post::find($id);
+
+        //$this->authorize('delete', $post);
+        
         if($post->image){
             // Storage 파사드의 경로는 기본적으로 storage/app 디렉토리로 설정된다.
             // 그래서 public/...으로 경로를 적어줘야한다.

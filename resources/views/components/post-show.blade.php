@@ -12,9 +12,9 @@
           <div class="col-md-8">
             <div class="card-body mt-3">
               <h5 class="card-title text-2xl md:font-black">{{ $post->title }}</h5>
-              <div class="flex">
+              <div class="flex justify-between">
                 <h6 class="card-subtitle mb-2 text-lg text-muted">{{ $post->writer->name}}</h6>
-                <like-button class="ml-3" :post="{{ $post }}"/>
+                <like-button class="ml-3" :post="{{ $post }}" :loginuser="{{ auth()->user()->id }}"/>
               </div>
               <hr>
               <p class="card-text text-lg md:font-bold mt-3 mb-4">{{ $post->content }}</p>
@@ -24,12 +24,13 @@
           </div>
         </div>
         <div class="card-body flex">
-            <a href="{{ route('posts.edit', ['post'=>$post->id]) }}" class="card-link">Update</a>
+          <a href="{{ route('posts.edit', ['post'=>$post->id]) }}" class="card-link">Update</a>
             <form class="ml-4" action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post" id="form">
               @csrf
               @method('delete')
               <button onclick="onDelete(event)" type="submit" >Delete</button>
             </form>
+            
         </div>
     </div>
     <script>
