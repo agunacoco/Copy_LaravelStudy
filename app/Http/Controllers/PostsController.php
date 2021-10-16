@@ -54,7 +54,9 @@ class PostsController extends Controller
         }
         Post::create($input);
         
-        return redirect()->route('posts.index')->with(session('session', 1));
+        // with 메소드를 사용해 데이터를 뷰에 전달할 수 있다.
+        // success라는 키로 값인 1을 함께 보낸다.
+        return redirect()->route('posts.index')->with('success', 1);
     }
 
     /**
@@ -122,7 +124,7 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
 
-        //$this->authorize('delete', $post);
+        $this->authorize('delete', $post);
         
         if($post->image){
             // Storage 파사드의 경로는 기본적으로 storage/app 디렉토리로 설정된다.

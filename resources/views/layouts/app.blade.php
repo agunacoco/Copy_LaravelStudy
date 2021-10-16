@@ -33,7 +33,7 @@
             </main>
         </div>
         <script>
-
+            // session() 함수는 세션 값을 얻거나 지정하는데 사용.
             @if (session('success'))
                 showSweetMsg();
             @endif
